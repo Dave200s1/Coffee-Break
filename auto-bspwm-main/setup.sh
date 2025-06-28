@@ -60,8 +60,7 @@ else
 	echo -e "\n${blueColour}[*] Enabling AUR support in pamac...${endColour}"
 	sleep 2
 	
-
- 	# Verbesserte AUR-Aktivierung
+	# Verbesserte AUR-Aktivierung
 	sudo sed -i '/^#EnableAUR/ s/^#//' /etc/pamac.conf 2>/dev/null
 	if ! grep -q '^EnableAUR' /etc/pamac.conf; then
 		echo 'EnableAUR' | sudo tee -a /etc/pamac.conf >/dev/null
@@ -77,10 +76,8 @@ else
 
 	echo -e "\n\n${blueColour}[*] Installing necessary packages for the environment...\n${endColour}"
 	sleep 2
-
 	
-
- 	# Install official packages
+	# Install official packages
 	sudo pacman -S --needed --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja python-pywal
 	official_exit=$?
 	
@@ -100,7 +97,7 @@ else
 		fi
 	}
 
- 	# Installiere Pakete einzeln mit Wiederholungsversuch
+	# Installiere Pakete einzeln mit Wiederholungsversuch
 	aur_exit=0
 	for pkg in scrub i3lock-fancy-git tty-clock; do
 		if ! install_aur_pkg "$pkg"; then
@@ -108,7 +105,12 @@ else
 			echo -e "${yellowColour}[*] Trying manual installation for $pkg...${endColour}"
 			cd /tmp
 			git clone "https://aur.archlinux.org/${pkg}.git"
-			cd "$pkg"
+			cd "$pkg" || {
+				echo -e "${redColour}[-] Failed to enter $pkg directory!${endColour}"
+				aur_exit=1
+				cd "$dir"
+				continue
+			}
 			makepkg -si --noconfirm
 			if [ $? -eq 0 ]; then
 				echo -e "${greenColour}[+] $pkg manually installed${endColour}"
