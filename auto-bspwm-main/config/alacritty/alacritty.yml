@@ -1,0 +1,84 @@
+# ~/.config/alacritty/alacritty.yml
+window:
+  padding:
+    x: 15
+    y: 15
+  decorations: full
+  opacity: 0.95
+
+font:
+  normal:
+    family: Hack Nerd Font
+    style: Regular
+  size: 12
+
+cursor:
+  style: Beam
+  beam_thickness: 1.8
+  blink_interval: 750
+  blink_timeout: 5
+
+key_bindings:
+  - { key: Left,  mods: Control, action: MoveFocusLeft }
+  - { key: Right, mods: Control, action: MoveFocusRight }
+  - { key: Up,    mods: Control, action: MoveFocusUp }
+  - { key: Down,  mods: Control, action: MoveFocusDown }
+  - { key: Enter, mods: Control|Shift, action: SpawnNewInstance }
+  - { key: T,     mods: Control|Shift, action: CreateNewTab }
+  - { key: F1,    action: Copy }
+  - { key: F2,    action: Paste }
+  - { key: Z,     mods: Control|Shift, action: ToggleViMode }
+
+mouse:
+  hide_when_typing: true
+  bindings:
+    - { mouse: Middle, action: PasteSelection }
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  save_to_clipboard: true
+
+url:
+  launcher: xdg-open
+  modifiers: Control
+
+shell:
+  program: /usr/bin/fish
+  args:
+    - --login
+
+colors:
+  primary:
+    foreground: '#e0e0d1'  
+    background: '#FFBC3F'  
+  
+  cursor:
+    text:   '#F99400'      
+    cursor: '#debc7c'      
+
+  selection:
+    text:   '#F99400'     
+    background: '#ccc5af'  
+
+  normal:
+    black:   '#2f2a27'    
+    red:     '#b5656d'     
+    green:   '#8d9f87'     
+    yellow:  '#c5a86c'     
+    blue:    '#7c8d87'     
+    magenta: '#9f8ba3'     
+    cyan:    '#88a399'     
+    white:   '#e0e0d1'     
+
+  bright:
+    black:   '#585146'     
+    red:     '#d08d94'     
+    green:   '#a6b8a0'     
+    yellow:  '#d8c58d'     
+    blue:    '#9caca6'     
+    magenta: '#b8a6bb'    
+    cyan:    '#a6bdb3'     
+    white:   '#f0f0e1'     
+
+  indexed_colors:
+    - { index: 16, color: '#5d735d' }  # URL accent

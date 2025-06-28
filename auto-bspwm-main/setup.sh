@@ -1,0 +1,397 @@
+#!/usr/bin/bash
+
+# Author: David Stefanov 
+
+# Colours
+greenColour="\e[0;32m\033[1m"
+endColour="\033[0m\e[0m"
+redColour="\e[0;31m\033[1m"
+blueColour="\e[0;34m\033[1m"
+yellowColour="\e[0;33m\033[1m"
+purpleColour="\e[0;35m\033[1m"
+turquoiseColour="\e[0;36m\033[1m"
+grayColour="\e[0;37m\033[1m"
+
+# Global variables
+dir=$(pwd)
+fdir="$HOME/.local/share/fonts"
+user=$(whoami)
+
+trap ctrl_c INT
+
+function ctrl_c(){
+	echo -e "\n\n${redColour}[!] Exiting...\n${endColour}"
+	exit 1
+}
+
+function banner() {
+    echo -e "\n${turquoiseColour}     (  )   (   )  )"
+    sleep 0.05
+    echo -e "     ) (   )  (  ("
+    sleep 0.05
+    echo -e "     ( )  (    ) )"
+    sleep 0.05
+    echo -e "     _____________"
+    sleep 0.05
+    echo -e "    <_____________> ___"
+    sleep 0.05
+    echo -e "    |             |/ _ \\"
+    sleep 0.05
+    echo -e "    |               | | |"
+    sleep 0.05
+    echo -e "    |               |_| |"
+    sleep 0.05
+    echo -e " ___|             |\\___/"
+    sleep 0.05
+    echo -e "/    \\___________/    \\"
+    sleep 0.05
+    echo -e "\\_____________________/${endColour}"
+}
+
+if [ "$user" == "root" ]; then
+	banner
+	echo -e "\n\n${redColour}[!] You should not run the script as the root user!\n${endColour}"
+    	exit 1
+else
+	banner
+	sleep 1
+	
+	# Enable AUR support in pamac
+	echo -e "\n${blueColour}[*] Enabling AUR support in pamac...${endColour}"
+	sleep 2
+	
+	# Check if AUR is already enabled
+	if grep -q "^EnableAUR" /etc/pamac.conf; then
+		echo -e "${greenColour}[+] AUR is already enabled${endColour}"
+	else
+		# Enable AUR in pamac configuration
+		if grep -q "#EnableAUR" /etc/pamac.conf; then
+			sudo sed -i 's/^#EnableAUR/EnableAUR/' /etc/pamac.conf
+			echo -e "${greenColour}[+] Uncommented existing EnableAUR line${endColour}"
+		else
+			echo "EnableAUR" | sudo tee -a /etc/pamac.conf >/dev/null
+			echo -e "${greenColour}[+] Added EnableAUR to config${endColour}"
+		fi
+		
+		# Verify enabling was successful
+		if grep -q "^EnableAUR" /etc/pamac.conf; then
+			echo -e "${greenColour}[+] AUR enabled successfully${endColour}"
+		else
+			echo -e "${redColour}[-] Failed to enable AUR! Continuing anyway...${endColour}"
+		fi
+	fi
+	sleep 1.5
+
+	echo -e "\n\n${blueColour}[*] Installing necessary packages for the environment...\n${endColour}"
+	sleep 2
+	
+	# Install official packages
+	sudo pacman -S --needed --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja python-pywal
+	official_exit=$?
+	
+	# Install AUR packages
+	echo -e "\n${yellowColour}[*] Installing AUR packages (may take several minutes)...${endColour}"
+	pamac build --no-confirm i3lock-fancy-git scrub tty-clock
+	aur_exit=$?
+	
+	# Check both installation results
+	if [ $official_exit -ne 0 ] || [ $aur_exit -ne 0 ]; then
+		echo -e "\n${redColour}[-] Failed to install some packages!\n${endColour}"
+		exit 1
+	else
+		echo -e "\n${greenColour}[+] Done\n${endColour}"
+		sleep 1.5
+	fi
+ 
+	echo -e "\n${blueColour}[*] Starting installation of necessary dependencies for the environment...\n${endColour}"
+	sleep 0.5
+
+	echo -e "\n${purpleColour}[*] Installing necessary dependencies for bspwm...\n${endColour}"
+	sleep 2
+	# Install dependencies using pacman
+	sudo pacman -S --needed --noconfirm base-devel git vim libxcb-util libxcb-ewmh libxcb-randr libxcb-icccm libxcb-keysyms libxcb-xinerama alsa-lib libxcb-xtest libxcb-shape libuv
+	exit_code=$?
+	
+	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
+		echo -e "\n${redColour}[-] Failed to install some dependencies for bspwm!\n${endColour}"
+		exit 1
+	else
+		echo -e "\n${greenColour}[+] Done\n${endColour}"
+		sleep 1.5
+	fi
+
+	echo -e "\n${purpleColour}[*] Installing necessary dependencies for polybar...\n${endColour}"
+	sleep 2
+
+	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb libxcb-util libxcb-randr libxcb-composite xcb-proto libxcb-image libxcb-ewmh libxcb-icccm libxcb-xkb libxcb-xrm libxcb-cursor alsa-lib libpulse jsoncpp libmpdclient curl libnl
+	exit_code=$?
+	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
+		echo -e "\n${redColour}[-] Failed to install some dependencies for polybar!\n${endColour}"
+		exit 1
+	else
+		echo -e "\n${greenColour}[+] Done\n${endColour}"
+		sleep 1.5
+	fi
+
+	echo -e "\n${purpleColour}[*] Installing necessary dependencies for picom...\n${endColour}"
+	sleep 2
+
+	sudo pacman -S --needed --noconfirm meson libxext libxcb libxcb-damage libxcb-xfixes libxcb-shape libxcb-render-util libxcb-render libxcb-randr libxcb-composite libxcb-image libxcb-present libxcb-xinerama pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 libxcb-glx
+	exit_code=$?
+	
+	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
+		echo -e "\n${redColour}[-] Failed to install some dependencies for picom!\n${endColour}"
+		exit 1
+	else
+		echo -e "\n${greenColour}[+] Done\n${endColour}"
+		sleep 1.5
+	fi
+
+	echo -e "\n${blueColour}[*] Starting installation of the tools...\n${endColour}"
+	sleep 0.5
+	mkdir -p ~/tools && cd ~/tools || exit
+
+	echo -e "\n${purpleColour}[*] Installing bspwm...\n${endColour}"
+	sleep 2
+	# Check if bspwm is already installed via package manager
+	if ! command -v bspwm &> /dev/null; then
+		# Clone and build from source
+		git clone https://github.com/baskerville/bspwm.git
+		cd bspwm || { echo -e "\n${redColour}[-] Failed to enter bspwm directory!\n${endColour}"; exit 1; }
+		make -j$(nproc)
+		sudo make install
+		install_status=$?
+		
+		if [ $install_status -ne 0 ] && [ $install_status -ne 130 ]; then
+			echo -e "\n${redColour}[-] Failed to build and install bspwm from source!\n${endColour}"
+			# Attempt to install from official repositories as fallback
+			echo -e "\n${yellowColour}[*] Attempting to install from official repositories...\n${endColour}"
+			sudo pacman -S --noconfirm bspwm
+			if [ $? -ne 0 ]; then
+				echo -e "\n${redColour}[-] Failed to install bspwm!\n${endColour}"
+				exit 1
+			fi
+		fi
+		cd ..
+	else
+		echo -e "\n${yellowColour}[!] bspwm is already installed. Skipping...\n${endColour}"
+	fi
+
+	echo -e "\n${greenColour}[+] bspwm installed successfully\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Installing sxhkd...\n${endColour}"
+	sleep 2
+	# Check if sxhkd is already installed
+	if ! command -v sxhkd &> /dev/null; then
+		git clone https://github.com/baskerville/sxhkd.git
+		cd sxhkd || { echo -e "\n${redColour}[-] Failed to enter sxhkd directory!\n${endColour}"; exit 1; }
+		make -j$(nproc)
+		sudo make install
+		if [ $? -ne 0 ] && [ $? -ne 130 ]; then
+			echo -e "\n${redColour}[-] Failed to install sxhkd!\n${endColour}"
+			exit 1
+		else
+			echo -e "\n${greenColour}[+] Done\n${endColour}"
+			sleep 1.5
+		fi
+		cd ..
+	else
+		echo -e "\n${yellowColour}[!] sxhkd is already installed. Skipping...\n${endColour}"
+	fi
+
+	echo -e "\n${purpleColour}[*] Installing polybar...\n${endColour}"
+	sleep 2
+	# Check if polybar is already installed
+	if ! command -v polybar &> /dev/null; then
+		git clone --recursive https://github.com/polybar/polybar
+		cd polybar || { echo -e "\n${redColour}[-] Failed to enter polybar directory!\n${endColour}"; exit 1; }
+		mkdir build
+		cd build
+		cmake ..
+		make -j$(nproc)
+		sudo make install
+		if [ $? -ne 0 ] && [ $? -ne 130 ]; then
+			echo -e "\n${redColour}[-] Failed to install polybar!\n${endColour}"
+			exit 1
+		else
+			echo -e "\n${greenColour}[+] Done\n${endColour}"
+			sleep 1.5
+		fi
+		cd ../..
+	else
+		echo -e "\n${yellowColour}[!] polybar is already installed. Skipping...\n${endColour}"
+	fi
+
+	echo -e "\n${purpleColour}[*] Installing picom...\n${endColour}"
+	sleep 2
+	# Check if picom is already installed
+	if ! command -v picom &> /dev/null; then
+		git clone https://github.com/ibhagwan/picom.git
+		cd picom || { echo -e "\n${redColour}[-] Failed to enter picom directory!\n${endColour}"; exit 1; }
+		git submodule update --init --recursive
+		meson --buildtype=release . build
+		ninja -C build
+		sudo ninja -C build install
+		if [ $? -ne 0 ] && [ $? -ne 130 ]; then
+			echo -e "\n${redColour}[-] Failed to install picom!\n${endColour}"
+			exit 1
+		else
+			echo -e "\n${greenColour}[+] Done\n${endColour}"
+			sleep 1.5
+		fi
+		cd ..
+	else
+		echo -e "\n${yellowColour}[!] picom is already installed. Skipping...\n${endColour}"
+	fi
+
+	echo -e "\n${purpleColour}[*] Installing Fish shell for user $user...\n${endColour}"
+	sleep 2
+
+	# Install fish shell
+	sudo pacman -S --needed --noconfirm fish
+	install_status=$?
+
+	if [ $install_status -ne 0 ] && [ $install_status -ne 130 ]; then
+		echo -e "\n${redColour}[-] Failed to install Fish shell for user $user!\n${endColour}"
+		exit 1
+	else
+		# Install Fisher plugin manager and tide prompt
+		echo -e "\n${yellowColour}[*] Configuring Fish shell plugins...\n${endColour}"
+		
+		# Create config directory if needed
+		mkdir -p ~/.config/fish
+		
+		# Install Fisher
+		fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher" 2>/dev/null
+		fisher_status=$?
+		
+		# Install tide prompt
+		fish -c "fisher install IlanCosman/tide@v5" 2>/dev/null
+		tide_status=$?
+		
+		# Verify installations
+		if [ $fisher_status -ne 0 ] || [ $tide_status -ne 0 ]; then
+			echo -e "\n${yellowColour}[!] Partial success: Fish installed but plugin configuration had issues${endColour}"
+			echo -e "${yellowColour}    You may need to manually run:"
+			echo -e "    fish -c 'fisher install jorgebucaran/fisher IlanCosman/tide@v5'${endColour}"
+		fi
+		
+		echo -e "\n${greenColour}[+] Fish shell installed and configured\n${endColour}"
+		sleep 1.5
+	fi
+
+	echo -e "\n${blueColour}[*] Starting configuration of fonts, wallpaper, configuration files, fish config, and scripts...\n${endColour}"
+	sleep 0.5
+
+	echo -e "\n${purpleColour}[*] Configuring fonts...\n${endColour}"
+	sleep 2
+	mkdir -p "$fdir"
+	cp -rv "$dir/fonts/"* "$fdir"
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Configuring wallpaper...\n${endColour}"
+	sleep 2
+	mkdir -p ~/Wallpapers
+	cp -rv "$dir/wallpapers/"* ~/Wallpapers/
+	
+	# Apply wallpaper using pywal
+	if command -v wal &> /dev/null; then
+		wal -nqi ~/Wallpapers/Pic1.png
+		sudo wal -nqi ~/Wallpapers/Pic1.png
+	else
+		echo -e "\n${yellowColour}[!] pywal not installed. Skipping wallpaper setup${endColour}"
+	fi
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Configuring configuration files...\n${endColour}"
+	sleep 2
+	mkdir -p ~/.config
+	cp -rv "$dir/config/"* ~/.config/
+	
+	mkdir -p ~/.config/alacritty
+	cp -v "$dir/alacritty.yml" ~/.config/alacritty/
+	
+	# Add fish config if exists in repo
+	if [ -f "$dir/config.fish" ]; then
+		mkdir -p ~/.config/fish
+		cp -v "$dir/config.fish" ~/.config/fish/
+	fi
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Configuring fish shell files...\n${endColour}"
+	sleep 2
+	# Set fish as default shell
+	fish_path=$(which fish)
+	if [ -n "$fish_path" ]; then
+		sudo chsh -s "$fish_path" "$user"
+		sudo chsh -s "$fish_path" root
+	else
+		echo -e "\n${redColour}[-] Fish shell not found! Cannot set as default shell${endColour}"
+	fi
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Configuring scripts...\n${endColour}"
+	sleep 2
+	sudo mkdir -p /usr/local/bin/
+	sudo cp -v "$dir/scripts/whichSystem.py" /usr/local/bin/
+	
+	# Create polybar scripts directory if it doesn't exist
+	mkdir -p ~/.config/polybar/shapes/scripts/
+	cp -rv "$dir/scripts/"*.sh ~/.config/polybar/shapes/scripts/
+	touch ~/.config/polybar/shapes/scripts/target
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Configuring necessary permissions and symbolic links...\n${endColour}"
+	sleep 2
+	chmod -R +x ~/.config/bspwm/
+	chmod +x ~/.config/polybar/launch.sh
+	chmod +x ~/.config/polybar/shapes/scripts/*.sh
+	sudo chmod +x /usr/local/bin/whichSystem.py
+	
+	# Configure root polybar scripts
+	sudo mkdir -p /root/.config/polybar/shapes/scripts/
+	sudo touch /root/.config/polybar/shapes/scripts/target
+	sudo ln -sf ~/.config/polybar/shapes/scripts/target /root/.config/polybar/shapes/scripts/target
+	
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${purpleColour}[*] Cleaning up...\n${endColour}"
+	sleep 2
+	if [ -d "$HOME/tools" ]; then
+		rm -rfv ~/tools
+	fi
+	
+	# Only remove the current directory if it's not the home directory
+	if [ "$dir" != "$HOME" ]; then
+		rm -rfv "$dir"
+	else
+		echo -e "\n${yellowColour}[!] Skipping removal of current directory (HOME directory)${endColour}"
+	fi
+	echo -e "\n${greenColour}[+] Done\n${endColour}"
+	sleep 1.5
+
+	echo -e "\n${greenColour}[+] Environment configured :D\n${endColour}"
+	sleep 1.5
+
+	while true; do
+		echo -en "\n${yellowColour}[?] It's necessary to restart the system. Do you want to restart now? ([y]/n) ${endColour}"
+		read -r
+		REPLY=${REPLY:-"y"}
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			echo -e "\n\n${greenColour}[+] Restarting...\n${endColour}"
+			sleep 1
+			sudo reboot
+		elif [[ $REPLY =~ ^[Nn]$ ]]; then
+			exit 0
+		else
+			echo -e "\n${redColour}[!] Invalid response\n${endColour}"
+		fi
+	done
+fi
