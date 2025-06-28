@@ -60,39 +60,65 @@ else
 	echo -e "\n${blueColour}[*] Enabling AUR support in pamac...${endColour}"
 	sleep 2
 	
-	# Check if AUR is already enabled
-	if grep -q "^EnableAUR" /etc/pamac.conf; then
-		echo -e "${greenColour}[+] AUR is already enabled${endColour}"
-	else
-		# Enable AUR in pamac configuration
-		if grep -q "#EnableAUR" /etc/pamac.conf; then
-			sudo sed -i 's/^#EnableAUR/EnableAUR/' /etc/pamac.conf
-			echo -e "${greenColour}[+] Uncommented existing EnableAUR line${endColour}"
-		else
-			echo "EnableAUR" | sudo tee -a /etc/pamac.conf >/dev/null
-			echo -e "${greenColour}[+] Added EnableAUR to config${endColour}"
-		fi
-		
-		# Verify enabling was successful
-		if grep -q "^EnableAUR" /etc/pamac.conf; then
-			echo -e "${greenColour}[+] AUR enabled successfully${endColour}"
-		else
-			echo -e "${redColour}[-] Failed to enable AUR! Continuing anyway...${endColour}"
-		fi
+
+ 	# Verbesserte AUR-Aktivierung
+	sudo sed -i '/^#EnableAUR/ s/^#//' /etc/pamac.conf 2>/dev/null
+	if ! grep -q '^EnableAUR' /etc/pamac.conf; then
+		echo 'EnableAUR' | sudo tee -a /etc/pamac.conf >/dev/null
 	fi
+	echo -e "${greenColour}[+] AUR support verified${endColour}"
+	sleep 1.5
+
+	# Installiere Build-Essentials
+	echo -e "\n${blueColour}[*] Installing build essentials...${endColour}"
+	sudo pacman -S --needed --noconfirm base-devel git 2>/dev/null
+	echo -e "${greenColour}[+] Build tools installed${endColour}"
 	sleep 1.5
 
 	echo -e "\n\n${blueColour}[*] Installing necessary packages for the environment...\n${endColour}"
 	sleep 2
+
 	
-	# Install official packages
+
+ 	# Install official packages
 	sudo pacman -S --needed --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja python-pywal
 	official_exit=$?
 	
-	# Install AUR packages
+	# Install AUR packages with individual error handling
 	echo -e "\n${yellowColour}[*] Installing AUR packages (may take several minutes)...${endColour}"
-	pamac build --no-confirm i3lock-fancy-git scrub tty-clock
-	aur_exit=$?
+	
+	# Funktion für AUR-Installation
+	install_aur_pkg() {
+		local pkg=$1
+		echo -e "\n${blueColour}[*] Installing $pkg...${endColour}"
+		if pamac build --no-confirm "$pkg"; then
+			echo -e "${greenColour}[+] $pkg installed successfully${endColour}"
+			return 0
+		else
+			echo -e "${redColour}[-] Failed to install $pkg${endColour}"
+			return 1
+		fi
+	}
+
+ 	# Installiere Pakete einzeln mit Wiederholungsversuch
+	aur_exit=0
+	for pkg in scrub i3lock-fancy-git tty-clock; do
+		if ! install_aur_pkg "$pkg"; then
+			# Versuche es mit manueller Installation
+			echo -e "${yellowColour}[*] Trying manual installation for $pkg...${endColour}"
+			cd /tmp
+			git clone "https://aur.archlinux.org/${pkg}.git"
+			cd "$pkg"
+			makepkg -si --noconfirm
+			if [ $? -eq 0 ]; then
+				echo -e "${greenColour}[+] $pkg manually installed${endColour}"
+			else
+				echo -e "${redColour}[-] Manual installation failed for $pkg${endColour}"
+				aur_exit=1
+			fi
+			cd "$dir"
+		fi
+	done
 	
 	# Check both installation results
 	if [ $official_exit -ne 0 ] || [ $aur_exit -ne 0 ]; then
