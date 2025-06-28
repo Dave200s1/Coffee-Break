@@ -78,56 +78,77 @@ else
 	sleep 2
 	
 	# Install official packages
+	echo -e "${blueColour}[*] Installing official packages...${endColour}"
 	sudo pacman -S --needed --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja python-pywal
 	official_exit=$?
 	
 	# Install AUR packages with individual error handling
 	echo -e "\n${yellowColour}[*] Installing AUR packages (may take several minutes)...${endColour}"
 	
-	# Funktion für AUR-Installation
+	# Funktion für AUR-Installation mit erweitertem Logging
 	install_aur_pkg() {
 		local pkg=$1
 		echo -e "\n${blueColour}[*] Installing $pkg...${endColour}"
-		if pamac build --no-confirm "$pkg"; then
-			echo -e "${greenColour}[+] $pkg installed successfully${endColour}"
+		
+		# Erster Versuch mit Pamac
+		if pamac build --no-confirm "$pkg" 2>&1 | tee /tmp/aur_install.log; then
+			echo -e "${greenColour}[+] $pkg installed successfully via Pamac${endColour}"
 			return 0
 		else
-			echo -e "${redColour}[-] Failed to install $pkg${endColour}"
-			return 1
-		fi
-	}
-
-	# Installiere Pakete einzeln mit Wiederholungsversuch
-	aur_exit=0
-	for pkg in scrub i3lock-fancy-git tty-clock; do
-		if ! install_aur_pkg "$pkg"; then
-			# Versuche es mit manueller Installation
-			echo -e "${yellowColour}[*] Trying manual installation for $pkg...${endColour}"
-			cd /tmp
+			echo -e "${yellowColour}[!] Pamac failed for $pkg, trying manual installation...${endColour}"
+			
+			# Manueller Installationsversuch
+			cd /tmp || return 1
 			git clone "https://aur.archlinux.org/${pkg}.git"
 			cd "$pkg" || {
 				echo -e "${redColour}[-] Failed to enter $pkg directory!${endColour}"
-				aur_exit=1
 				cd "$dir"
-				continue
+				return 1
 			}
+			
+			# Spezielle Behandlung für i3lock-fancy-git
+			if [[ "$pkg" == "i3lock-fancy-git" ]]; then
+				sudo pacman -S --needed --noconfirm jq  # Zusätzliche Abhängigkeit
+			fi
+			
 			makepkg -si --noconfirm
-			if [ $? -eq 0 ]; then
-				echo -e "${greenColour}[+] $pkg manually installed${endColour}"
+			makepkg_status=$?
+			cd "$dir"
+			
+			if [ $makepkg_status -eq 0 ]; then
+				echo -e "${greenColour}[+] $pkg manually installed successfully${endColour}"
+				return 0
 			else
 				echo -e "${redColour}[-] Manual installation failed for $pkg${endColour}"
-				aur_exit=1
+				return 1
 			fi
-			cd "$dir"
+		fi
+	}
+
+	# Installiere Pakete einzeln mit verbesserter Fehlerbehandlung
+	aur_exit=0
+	failed_pkgs=()
+	for pkg in scrub i3lock-fancy-git tty-clock; do
+		if ! install_aur_pkg "$pkg"; then
+			failed_pkgs+=("$pkg")
+			aur_exit=1
 		fi
 	done
 	
+	# Zeige fehlgeschlagene Pakete an
+	if [ ${#failed_pkgs[@]} -gt 0 ]; then
+		echo -e "\n${redColour}[-] Failed to install: ${failed_pkgs[*]}${endColour}"
+		echo -e "${yellowColour}[!] You can try manual installation with:"
+		echo -e "cd /tmp && git clone https://aur.archlinux.org/<package>.git"
+		echo -e "cd <package> && makepkg -si${endColour}"
+	fi
+	
 	# Check both installation results
 	if [ $official_exit -ne 0 ] || [ $aur_exit -ne 0 ]; then
-		echo -e "\n${redColour}[-] Failed to install some packages!\n${endColour}"
-		exit 1
+		echo -e "\n${redColour}[-] Some packages failed to install! Continuing with setup...${endColour}"
+		sleep 3
 	else
-		echo -e "\n${greenColour}[+] Done\n${endColour}"
+		echo -e "\n${greenColour}[+] All packages installed successfully${endColour}"
 		sleep 1.5
 	fi
  
