@@ -172,7 +172,8 @@ else
 	echo -e "\n${purpleColour}[*] Installing necessary dependencies for polybar...\n${endColour}"
 	sleep 2
 
-	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb libxcb-util libxcb-randr libxcb-composite xcb-proto libxcb-image libxcb-ewmh libxcb-icccm libxcb-xkb libxcb-xrm libxcb-cursor alsa-lib libpulse jsoncpp libmpdclient curl libnl
+	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb libxcb-util libxcb-randr libxcb-composite xcb-proto libxcb xcb-util-image xcb-util-wm libxkbcommon-x11 xcb-util-cursor
+ alsa-lib libpulse jsoncpp libmpdclient curl libnl
 	exit_code=$?
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
 		echo -e "\n${redColour}[-] Failed to install some dependencies for polybar!\n${endColour}"
