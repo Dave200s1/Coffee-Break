@@ -158,7 +158,7 @@ else
 	echo -e "\n${purpleColour}[*] Installing necessary dependencies for bspwm...\n${endColour}"
 	sleep 2
 	# Install dependencies using pacman
-	sudo pacman -S --needed --noconfirm base-devel git vim libxcb-util libxcb-ewmh libxcb-randr libxcb-icccm libxcb-keysyms libxcb-xinerama alsa-lib libxcb-xtest libxcb-shape libuv
+	sudo pacman -S --needed --noconfirm meson libxext libxcb libxcb-damage libxcb-xfixes libxcb-shape libxcb-render-util libxcb-render libxcb-randr libxcb-composite libxcb-image libxcb-present libxcb-xinerama xcb-util-keysyms xcb-util xcb-util-image xcb-util-cursor pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 libxcb-glx
 	exit_code=$?
 	
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
