@@ -17,7 +17,7 @@ sudo pacman -Syu --noconfirm
 2. Clone the repository and navigate to it.
 
 ```shell
-git clone https://David_2001@bitbucket.org/python-david/matcha.git
+git clone https://github.com/Dave200s1/Coffee-Break.git
 cd auto-bspwm
 ```
 
