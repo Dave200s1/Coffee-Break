@@ -251,30 +251,46 @@ else
 
 	echo -e "\n${purpleColour}[*] Installing polybar...\n${endColour}"
 	sleep 2
+
 	# Check if polybar is already installed
 	if ! command -v polybar &> /dev/null; then
-	    # Install from AUR with automatic patching
-	    echo -e "${blueColour}[*] Installing polybar-git from AUR...${endColour}"
+	    # Clean previous attempts
+	    rm -rf ~/tools/polybar 2>/dev/null
+	    
+	    # Install required dependencies
+	    echo -e "${blueColour}[*] Installing additional dependencies...${endColour}"
+	    sudo pacman -S --needed --noconfirm freetype2 libxft pango cairo
+	    
+	    # First try AUR installation
+	    echo -e "${blueColour}[*] Attempting AUR installation...${endColour}"
 	    if pamac build --no-confirm polybar-git; then
 	        echo -e "${greenColour}[+] polybar installed successfully via AUR${endColour}"
 	    else
-	        echo -e "${redColour}[-] Failed to install polybar-git from AUR${endColour}"
-	        echo -e "${yellowColour}[!] Attempting manual build as fallback...${endColour}"
+	        echo -e "${redColour}[-] AUR installation failed, trying manual build...${endColour}"
 	        
-	        # Fallback to manual build
-	        git clone --recursive https://github.com/polybar/polybar
-	        cd polybar || { echo -e "${redColour}[-] Failed to enter polybar directory!${endColour}"; exit 1; }
-	        mkdir build && cd build
-	        cmake .. -DWITH_ALL=ON
+	        # Manual build process
+	        cd ~/tools
+	        git clone --recursive https://github.com/polybar/polybar.git
+	        cd polybar
+	        
+	        # Explicitly link freetype
+	        export LDFLAGS="-lfreetype"
+	        
+	        mkdir -p build
+	        cd build
+	        cmake .. \
+	            -DCMAKE_CXX_FLAGS="-Wno-narrowing" \
+	            -DWITH_ALL=ON \
+	            -DBUILD_TESTS=OFF
 	        make -j$(nproc)
-	        sudo make install
-	        if [ $? -eq 0 ]; then
-	            echo -e "${greenColour}[+] polybar manually installed${endColour}"
+	        
+	        if sudo make install; then
+	            echo -e "${greenColour}[+] polybar manually installed successfully${endColour}"
 	        else
-	            echo -e "${redColour}[-] Manual build failed!${endColour}"
+	            echo -e "${redColour}[-] Manual installation failed${endColour}"
+	            echo -e "${yellowColour}[!] You may need to install an older version of polybar${endColour}"
 	            exit 1
 	        fi
-	        cd ../..
 	    fi
 	else
 	    echo -e "${yellowColour}[!] polybar is already installed. Skipping...${endColour}"
