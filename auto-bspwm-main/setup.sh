@@ -172,8 +172,7 @@ else
 	echo -e "\n${purpleColour}[*] Installing necessary dependencies for polybar...\n${endColour}"
 	sleep 2
 
-	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb xcb-util libxcb xcb-proto  xcb-util-image xcb-util-wm libxkbcommon-x11 xcb-util-cursor
- manjaro-alsa libpulse jsoncpp libmpdclient curl libnl
+	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb xcb-util libxcb xcb-proto  xcb-util-image xcb-util-wm libxkbcommon-x11 xcb-util-cursor libpulse jsoncpp libmpdclient curl libnl
 	exit_code=$?
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
 		echo -e "\n${redColour}[-] Failed to install some dependencies for polybar!\n${endColour}"
@@ -186,7 +185,7 @@ else
 	echo -e "\n${purpleColour}[*] Installing necessary dependencies for picom...\n${endColour}"
 	sleep 2
 
-	sudo pacman -S --needed --noconfirm meson libxext libxcb libxcb-damage libxcb-xfixes libxcb-shape libxcb-render-util libxcb-render libxcb-randr libxcb-composite libxcb-image libxcb-present libxcb-xinerama pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 libxcb-glx
+	sudo pacman -S --needed --noconfirm meson libxext libxcb xcb-util-renderutil xcb-util-image pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 libxcb-glx
 	exit_code=$?
 	
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
