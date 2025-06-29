@@ -173,7 +173,7 @@ else
 	sleep 2
 
 	sudo pacman -S --needed --noconfirm cmake pkgconf python-sphinx cairo libxcb xcb-util libxcb xcb-proto  xcb-util-image xcb-util-wm libxkbcommon-x11 xcb-util-cursor
- alsa-utils libpulse jsoncpp libmpdclient curl libnl
+ manjaro-alsa libpulse jsoncpp libmpdclient curl libnl
 	exit_code=$?
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
 		echo -e "\n${redColour}[-] Failed to install some dependencies for polybar!\n${endColour}"
