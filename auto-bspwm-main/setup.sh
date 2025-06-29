@@ -185,7 +185,7 @@ else
 	echo -e "\n${purpleColour}[*] Installing necessary dependencies for picom...\n${endColour}"
 	sleep 2
 
-	sudo pacman -S --needed --noconfirm meson libxext libxcb xcb-util-renderutil xcb-util-image pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 libxcb-glx
+	sudo pacman -S --needed --noconfirm meson libxext libxcb xcb-util-renderutil xcb-util-image pixman dbus libconfig mesa pcre2 pcre libevdev uthash libev libx11 
 	exit_code=$?
 	
 	if [ $exit_code -ne 0 ] && [ $exit_code -ne 130 ]; then
