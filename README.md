@@ -14,6 +14,7 @@ It comes with aesthetic set of wallpapers for a stylish desktop experience!
 sudo pacman -Syu --noconfirm
 sudo pacman -S manjaro-alsa
 sudo pacman -S --needed lib32-freetype2
+sudo pacman -Syu python-pywal
 ```
 
 2. Clone the repository and navigate to it.
