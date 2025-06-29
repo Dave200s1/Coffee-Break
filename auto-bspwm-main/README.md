@@ -12,6 +12,7 @@ It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
 ```shell
 sudo pacman -Syu --noconfirm
+sudo pacman -S manjaro-alsa
 ```
 
 2. Clone the repository and navigate to it.
