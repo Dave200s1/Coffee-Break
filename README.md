@@ -2,6 +2,7 @@
 # Cofee-Break
 ![npm bundle size (version)](https://img.shields.io/badge/version-0.0.1-green) ![npm bundle size (version)](https://img.shields.io/badge/language-python3-yellow) 
 
+[Still in production not ready !!!]
 A Bash script that automates the installation and setup of bspwm on a arch-based environment, including essential tools and custom configs. 
 It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
