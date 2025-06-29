@@ -142,14 +142,25 @@ else
 		echo -e "cd /tmp && git clone https://aur.archlinux.org/<package>.git"
 		echo -e "cd <package> && makepkg -si${endColour}"
 	fi
-	
+
 	# Check both installation results
 	if [ $official_exit -ne 0 ] || [ $aur_exit -ne 0 ]; then
-		echo -e "\n${redColour}[-] Some packages failed to install! Continuing with setup...${endColour}"
-		sleep 3
+	    echo -e "\n${redColour}[-] Some packages failed to install!${endColour}"
+	    
+	    # Check which repositories had failures
+	    if [ $official_exit -ne 0 ]; then
+	        echo -e "${redColour}[-] Official repository packages failed to install${endColour}"
+	    fi
+	    
+	    if [ $aur_exit -ne 0 ]; then
+	        echo -e "${redColour}[-] AUR packages failed to install${endColour}"
+	    fi
+	    
+	    echo -e "${redColour}Continuing with setup...${endColour}"
+	    sleep 3
 	else
-		echo -e "\n${greenColour}[+] All packages installed successfully${endColour}"
-		sleep 1.5
+	    echo -e "\n${greenColour}[+] All packages installed successfully${endColour}"
+	    sleep 1.5
 	fi
  
 	echo -e "\n${blueColour}[*] Starting installation of necessary dependencies for the environment...\n${endColour}"
