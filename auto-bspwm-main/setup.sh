@@ -253,23 +253,31 @@ else
 	sleep 2
 	# Check if polybar is already installed
 	if ! command -v polybar &> /dev/null; then
-		git clone --recursive https://github.com/polybar/polybar
-		cd polybar || { echo -e "\n${redColour}[-] Failed to enter polybar directory!\n${endColour}"; exit 1; }
-		mkdir build
-		cd build
-		cmake ..
-		make -j$(nproc)
-		sudo make install
-		if [ $? -ne 0 ] && [ $? -ne 130 ]; then
-			echo -e "\n${redColour}[-] Failed to install polybar!\n${endColour}"
-			exit 1
-		else
-			echo -e "\n${greenColour}[+] Done\n${endColour}"
-			sleep 1.5
-		fi
-		cd ../..
+	    # Install from AUR with automatic patching
+	    echo -e "${blueColour}[*] Installing polybar-git from AUR...${endColour}"
+	    if pamac build --no-confirm polybar-git; then
+	        echo -e "${greenColour}[+] polybar installed successfully via AUR${endColour}"
+	    else
+	        echo -e "${redColour}[-] Failed to install polybar-git from AUR${endColour}"
+	        echo -e "${yellowColour}[!] Attempting manual build as fallback...${endColour}"
+	        
+	        # Fallback to manual build
+	        git clone --recursive https://github.com/polybar/polybar
+	        cd polybar || { echo -e "${redColour}[-] Failed to enter polybar directory!${endColour}"; exit 1; }
+	        mkdir build && cd build
+	        cmake .. -DWITH_ALL=ON
+	        make -j$(nproc)
+	        sudo make install
+	        if [ $? -eq 0 ]; then
+	            echo -e "${greenColour}[+] polybar manually installed${endColour}"
+	        else
+	            echo -e "${redColour}[-] Manual build failed!${endColour}"
+	            exit 1
+	        fi
+	        cd ../..
+	    fi
 	else
-		echo -e "\n${yellowColour}[!] polybar is already installed. Skipping...\n${endColour}"
+	    echo -e "${yellowColour}[!] polybar is already installed. Skipping...${endColour}"
 	fi
 
 	echo -e "\n${purpleColour}[*] Installing picom...\n${endColour}"
