@@ -254,42 +254,54 @@ else
 
 	# Check if polybar is already installed
 	if ! command -v polybar &> /dev/null; then
-	    # Clean previous attempts
-	    rm -rf ~/tools/polybar 2>/dev/null
+	    # Clean previous attempts completely
+	    rm -rf ~/tools/polybar ~/tools/polybar-build 2>/dev/null
 	    
-	    # Install required dependencies
-	    echo -e "${blueColour}[*] Installing additional dependencies...${endColour}"
-	    sudo pacman -S --needed --noconfirm freetype2 libxft pango cairo
-	    
-	    # First try AUR installation
-	    echo -e "${blueColour}[*] Attempting AUR installation...${endColour}"
-	    if pamac build --no-confirm polybar-git; then
+	    # Install ALL required dependencies
+	    echo -e "${blueColour}[*] Installing comprehensive dependencies...${endColour}"
+	    sudo pacman -S --needed --noconfirm \
+	        freetype2 libxft pango cairo xcb-proto xcb-util-image \
+	        xcb-util-wm xcb-util-cursor alsa-lib libpulse jsoncpp \
+	        libmpdclient curl libnl libuv wireless_tools
+	
+	    # First try AUR installation with explicit freetype linking
+	    echo -e "${blueColour}[*] Attempting optimized AUR installation...${endColour}"
+	    if LDFLAGS="-lfreetype" pamac build --no-confirm polybar-git; then
 	        echo -e "${greenColour}[+] polybar installed successfully via AUR${endColour}"
 	    else
 	        echo -e "${redColour}[-] AUR installation failed, trying manual build...${endColour}"
 	        
-	        # Manual build process
-	        cd ~/tools
-	        git clone --recursive https://github.com/polybar/polybar.git
+	        # Manual build with proper directory handling
+	        mkdir -p ~/tools/polybar-build
+	        cd ~/tools/polybar-build
+	        
+	        git clone --depth 1 --recursive https://github.com/polybar/polybar.git
 	        cd polybar
 	        
-	        # Explicitly link freetype
-	        export LDFLAGS="-lfreetype"
-	        
+	        # Apply critical build fixes
+	        export LDFLAGS="-lfreetype -lfontconfig -lpango-1.0 -lpangocairo-1.0"
 	        mkdir -p build
 	        cd build
-	        cmake .. \
-	            -DCMAKE_CXX_FLAGS="-Wno-narrowing" \
-	            -DWITH_ALL=ON \
-	            -DBUILD_TESTS=OFF
-	        make -j$(nproc)
 	        
-	        if sudo make install; then
+	        cmake .. \
+	            -DCMAKE_CXX_FLAGS="-Wno-narrowing -Wno-error=deprecated-declarations" \
+	            -DWITH_ALL=ON \
+	            -DBUILD_TESTS=OFF \
+	            -DENABLE_CCACHE=OFF
+	        
+	        if make -j$(nproc) && sudo make install; then
 	            echo -e "${greenColour}[+] polybar manually installed successfully${endColour}"
+	            sudo ldconfig  # Refresh library cache
 	        else
-	            echo -e "${redColour}[-] Manual installation failed${endColour}"
-	            echo -e "${yellowColour}[!] You may need to install an older version of polybar${endColour}"
-	            exit 1
+	            # Ultimate fallback - install from Arch repos
+	            echo -e "${yellowColour}[!] Trying Arch official package...${endColour}"
+	            if sudo pacman -S --noconfirm polybar; then
+	                echo -e "${greenColour}[+] Installed stable polybar from official repos${endColour}"
+	            else
+	                echo -e "${redColour}[-] All installation methods failed${endColour}"
+	                echo -e "${yellowColour}[!] Try: 1) Update system 2) Use older GCC version${endColour}"
+	                exit 1
+	            fi
 	        fi
 	    fi
 	else
