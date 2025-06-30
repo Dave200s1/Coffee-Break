@@ -51,7 +51,9 @@ chmod +x setup.sh
 And restart, then the bspwm option should be visable
 
 ## Overview of the environment
-
+![Alt text](overview1.png "Optional title")
+![Alt text](overview2.png "Optional title")
+![Alt text](overview3.png "Optional title")
 
 
 ## Keyboard shortcuts
