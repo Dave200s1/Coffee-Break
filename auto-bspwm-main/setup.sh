@@ -80,7 +80,7 @@ else
 	# Install official packages
  	sudo pacman -Syu --noconfirm
 	echo -e "${blueColour}[*] Installing official packages...${endColour}"
-	sudo pacman -S --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja
+	sudo pacman -S --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop screenfetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja
 	official_exit=$?
 	
 	# Install AUR packages with individual error handling
