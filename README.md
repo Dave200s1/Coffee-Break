@@ -39,7 +39,7 @@ chmod +x setup.sh
 
 ## If you do not see bspwm option
 ```
-   sudo nano /usr/share/xsessions/
+   sudo nano /usr/share/xsessions/bspwm.desktop
 ```
 
 ```
