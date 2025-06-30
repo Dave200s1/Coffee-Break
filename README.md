@@ -37,6 +37,19 @@ chmod +x setup.sh
 
 5. After the script has finished, you will be prompted to restart the system. Once you have rebooted, select `bspwm` as the window manager and then log in.
 
+## If you do not see bspwm option
+```
+   sudo nano /usr/share/xsessions/
+```
+
+```
+   [Desktop Entry]
+   Name=BSPWM
+   Exec=bspwm
+   Type=Application
+```
+And restart, then the bspwm option should be visable
+
 ## Overview of the environment
 
 
