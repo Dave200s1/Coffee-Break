@@ -8,7 +8,7 @@ It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
 
 
-## Installation
+## 📦 Installation
 1. Install available updates.
 
 ```shell
@@ -37,7 +37,7 @@ chmod +x setup.sh
 
 5. After the script has finished, you will be prompted to restart the system. Once you have rebooted, select `bspwm` as the window manager and then log in.
 
-## If you do not see bspwm option
+## 🔧 If you do not see bspwm option
 ```
    sudo nano /usr/share/xsessions/bspwm.desktop
 ```
@@ -50,13 +50,13 @@ chmod +x setup.sh
 ```
 And restart, then the bspwm option should be visable
 
-## Overview of the environment
+## 🏞️ Overview of the environment
 ![Alt text](Overview1.png "Optional title")
 ![Alt text](Overview2.png "Optional title")
 ![Alt text](Overview4.png "Optional title")
 
 
-## Keyboard shortcuts
+## ⌨️ Keyboard shortcuts
 - <kbd>Windows</kbd> + <kbd>Enter</kbd>: Open a terminal emulator window (alacritty).
 - <kbd>Windows</kbd> + <kbd>W</kbd>: Close the current window.
 - <kbd>Windows</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd>: Restart the bspwm configuration.
@@ -100,10 +100,10 @@ And restart, then the bspwm option should be visable
 - <kbd>F3</kbd>: Copy to buffer B.
 - <kbd>F4</kbd>: Paste from buffer B.
 
-# Note
+# 🛑 Note
 The following script installs and enables some AUR-packages.
 
-## Software
+## ⚙️ Software
 This configuration uses the following software:
 - **WM**: [bspwm](https://github.com/baskerville/bspwm)
 - **Hotkey**: [sxhkd](https://github.com/baskerville/sxhkd)
@@ -120,11 +120,11 @@ This configuration uses the following software:
 - **Static Wallpaper**: [feh](https://github.com/derf/feh)
 - **Screenshot**: [flameshot](https://flameshot.org/)
 
-## Coming soon 
+## 🚀 Coming soon 
 - **SolusOs support
 - **RustDev-package
 
-## Credits
+## 🙏 Credits
 - This environment has been inspired by the functionalities of [S4vitar's](https://github.com/s4vitar) environment.
 - This is a fork of [auto_bspwm](https://github.com/r1vs3c/auto-bspwm) by [r1vs3c](https://github.com/r1vs3c)
 - Icon [flaticon.com](https://www.flaticon.com/free-icon/coffee-beans_9620822?term=coffee&page=1&position=28&origin=search&related_id=9620822)
