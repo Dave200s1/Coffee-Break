@@ -392,7 +392,9 @@ else
 	mkdir -p ~/Wallpapers
 	cp -rv "$dir/wallpapers/"* ~/Wallpapers/
 	
-	# Apply wallpaper using pywal
+	# Apply wallpaper using pywal or feh
+ 	feh --bg-fill ~/Wallpapers/Pic1.jpg
+  
 	if command -v wal &> /dev/null; then
 		wal -nqi ~/Wallpapers/Pic1.png
 		sudo wal -nqi ~/Wallpapers/Pic1.png
