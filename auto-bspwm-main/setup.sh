@@ -78,8 +78,9 @@ else
 	sleep 2
 	
 	# Install official packages
+ 	sudo pacman -Syu --noconfirm
 	echo -e "${blueColour}[*] Installing official packages...${endColour}"
-	sudo pacman -S --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja python-pywal
+	sudo pacman -S --noconfirm alacritty chromium rofi feh xclip ranger scrot wmname imagemagick cmatrix htop neofetch python-pip procps-ng fzf lsd bat pamixer flameshot clang curl ttf-font-awesome ninja
 	official_exit=$?
 	
 	# Install AUR packages with individual error handling
@@ -124,7 +125,8 @@ else
 			fi
 		fi
 	}
-
+ 	# Pywal
+	yay -S --noconfirm python-pywal-git
 	# Installiere Pakete einzeln mit verbesserter Fehlerbehandlung
 	aur_exit=0
 	failed_pkgs=()
