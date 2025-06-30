@@ -100,6 +100,9 @@ And restart, then the bspwm option should be visable
 - <kbd>F3</kbd>: Copy to buffer B.
 - <kbd>F4</kbd>: Paste from buffer B.
 
+# Note
+The following script installs and enables some AUR-packages.
+
 ## Software
 This configuration uses the following software:
 - **WM**: [bspwm](https://github.com/baskerville/bspwm)
@@ -124,3 +127,4 @@ This configuration uses the following software:
 ## Credits
 - This environment has been inspired by the functionalities of [S4vitar's](https://github.com/s4vitar) environment.
 - This is a fork of [auto_bspwm](https://github.com/r1vs3c/auto-bspwm) by [r1vs3c](https://github.com/r1vs3c)
+- Icon [flaticon.com](https://www.flaticon.com/free-icon/coffee-beans_9620822?term=coffee&page=1&position=28&origin=search&related_id=9620822)
