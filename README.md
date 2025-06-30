@@ -53,7 +53,7 @@ And restart, then the bspwm option should be visable
 ## Overview of the environment
 ![Alt text](Overview1.png "Optional title")
 ![Alt text](Overview2.png "Optional title")
-![Alt text](Overview3.png "Optional title")
+![Alt text](Overview4.png "Optional title")
 
 
 ## Keyboard shortcuts
