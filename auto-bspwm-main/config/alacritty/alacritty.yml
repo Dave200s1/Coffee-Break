@@ -50,7 +50,7 @@ shell:
 colors:
   primary:
     foreground: '#e0e0d1'  
-    background: '#FFBC3F'  
+    background: '#363431'  
   
   cursor:
     text:   '#F99400'      
