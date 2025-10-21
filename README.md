@@ -115,6 +115,10 @@ And restart, then the bspwm option should be visable
 # 🛑 Note
 The following script installs and enables some AUR-packages.
 
+## Wallpapers
+Special thanks to the Artists
+- **Pic1.jpg**: [Magen Montepeque Hanlon](https://jp.pinterest.com/magee_03/)
+
 ## ⚙️ Software
 This configuration uses the following software:
 - **WM**: [bspwm](https://github.com/baskerville/bspwm)
@@ -127,10 +131,11 @@ This configuration uses the following software:
 - **File Manager**: [thunar](https://docs.xfce.org/xfce/thunar/start)
 - **Fonts**: [iosevka](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Iosevka) and [hack](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack)
 - **Application Launcher**: [rofi](https://github.com/davatorium/rofi)
-- **Browsers**: [chromium](https://www.chromium.org/getting-involved/download-chromium/)
+- **Browsers**: [librewolf](https://librewolf.net/)
 - **Terminals**: [alacritty](https://alacritty.org/) and [qterminal](https://github.com/lxqt/qterminal)
 - **Static Wallpaper**: [feh](https://github.com/derf/feh)
 - **Screenshot**: [flameshot](https://flameshot.org/)
+- **C-Compiler**: [Clang](https://github.com/llvm/llvm-project)
 
 ## 🚀 Coming soon 
 - **SolusOs support
