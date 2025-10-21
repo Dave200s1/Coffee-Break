@@ -124,9 +124,9 @@ super + ctrl + {Left,Down,Up,Right}
 alt + super + {Left,Down,Up,Right}
 	~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
 
-# Open Chromium/ or Firefox
+# Open Librewolf/ or Firefox
 super + shift +f
-    /usr/bin/librewolf
+    flatpak run io.gitlab.librewolf-community
 
 # Open Burpsuite
 super + shift + b
