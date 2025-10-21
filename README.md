@@ -27,7 +27,7 @@ sudo pacman -S manjaro-alsa lib32-freetype2 python-pywal
 2. Clone the repository and navigate to it.
 
 ```shell
-git clone https://github.com/Dave200s1/Coffee-Break.git
+git clone --branch Release_2.0 --single-branch https://github.com/Dave200s1/Coffee-Break.git
 cd auto-bspwm
 ```
 
