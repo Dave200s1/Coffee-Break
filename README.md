@@ -1,11 +1,19 @@
 ![Alt text](coffee-beans.png "Optional title")
-# Coffee-Break
+# Coffee-Break 2.0
 ![npm bundle size (version)](https://img.shields.io/badge/version-0.0.1-green) ![npm bundle size (version)](https://img.shields.io/badge/language-python3-yellow) ![npm bundle size (version)](https://img.shields.io/badge/shell-bash-green)
 
 
 A Bash script that automates the installation and setup of bspwm on a arch-based environment, including essential tools and custom configs. 
 It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
+## Whats new ?
+
+* Clang C-compiler
+* privacy focused web-browser (librewolf)
+* alacritty issues fixed
+* new keyboard-bindings (more MacOS like)
+* chromium removed!
+* new wallpapers
 
 
 ## 📦 Installation
