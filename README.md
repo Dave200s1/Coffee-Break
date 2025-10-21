@@ -50,7 +50,7 @@ chmod +x setup.sh
 ```
 And restart, then the bspwm option should be visable
 
-If you get the warning of depricated .xml use
+If you get the warning of deprecated .xml use
 ```
    alacritty migrate
 ```
