@@ -379,6 +379,13 @@ else
 		sleep 1.5
 	fi
 
+	echo -e "\n${purpleColour}[*] Installing Clang compiler...\n${endColour}"
+	sleep 2
+
+	# Installing clang compiler
+	sudo pacman -S --needed --noconfirm clang
+	install_status=$?
+
 	echo -e "\n${blueColour}[*] Starting configuration of fonts, wallpaper, configuration files, fish config, and scripts...\n${endColour}"
 	sleep 0.5
 
