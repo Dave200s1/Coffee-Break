@@ -23,7 +23,7 @@ super + alt + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
-super + {_,shift + }w
+super + {_,shift + }q
 	bspc node -{c,k}
 
 # alternate between the tiled and monocle layout
@@ -126,7 +126,7 @@ alt + super + {Left,Down,Up,Right}
 
 # Open Chromium/ or Firefox
 super + shift +f
-    /usr/bin/firefox
+    /usr/bin/librewolf
 
 # Open Burpsuite
 super + shift + b
