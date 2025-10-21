@@ -6,7 +6,7 @@
 A Bash script that automates the installation and setup of bspwm on a arch-based environment, including essential tools and custom configs. 
 It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
-## Whats new ?
+## 👋 Whats new ?
 
 * Clang C-compiler
 * privacy focused web-browser (librewolf)
