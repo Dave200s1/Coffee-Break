@@ -386,6 +386,13 @@ else
 	sudo pacman -S --needed --noconfirm clang
 	install_status=$?
 
+	echo -e "\n${purpleColour}[*] Installing LibreWolf browser via Flatpak...\n${endColour}"
+	sleep 2
+	
+	# Install LibreWolf using Flatpak
+	flatpak install -y flathub io.gitlab.librewolf-community
+	install_status=$?
+
 	echo -e "\n${blueColour}[*] Starting configuration of fonts, wallpaper, configuration files, fish config, and scripts...\n${endColour}"
 	sleep 0.5
 
