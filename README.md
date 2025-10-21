@@ -115,10 +115,6 @@ And restart, then the bspwm option should be visable
 # 🛑 Note
 The following script installs and enables some AUR-packages.
 
-## Wallpapers
-Special thanks to the Artists
-- **Pic1.jpg**: [Magen Montepeque Hanlon](https://jp.pinterest.com/magee_03/)
-
 ## ⚙️ Software
 This configuration uses the following software:
 - **WM**: [bspwm](https://github.com/baskerville/bspwm)
@@ -145,3 +141,5 @@ This configuration uses the following software:
 - This environment has been inspired by the functionalities of [S4vitar's](https://github.com/s4vitar) environment.
 - This is a fork of [auto_bspwm](https://github.com/r1vs3c/auto-bspwm) by [r1vs3c](https://github.com/r1vs3c)
 - Icon [flaticon.com](https://www.flaticon.com/free-icon/coffee-beans_9620822?term=coffee&page=1&position=28&origin=search&related_id=9620822)
+Special thanks to the Artists
+-    **Pic1.jpg**: [Magen Montepeque Hanlon](https://jp.pinterest.com/magee_03/)
