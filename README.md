@@ -7,7 +7,7 @@ A Bash script that automates the installation and setup of bspwm on a arch-based
 It comes with aesthetic set of wallpapers for a stylish desktop experience!
 
 ## 🔴 Chech out the newest version here ! ⬇️
-* [get the most recent release !](https://github.com/Dave200s1/QEMU_quick_installer/tree/release/multipleDistros) 📦
+* [get the most recent release !](https://github.com/Dave200s1/Coffee-Break/tree/Release_2.0) 📦
 
 ## 📦 Installation
 1. Install available updates.
