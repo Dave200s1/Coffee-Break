@@ -14,7 +14,7 @@ font:
 
 cursor:
   style: Beam
-  beam_thickness: 1.8
+  thickness: 1.8
   blink_interval: 750
   blink_timeout: 5
 
