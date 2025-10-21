@@ -37,7 +37,7 @@ chmod +x setup.sh
 
 5. After the script has finished, you will be prompted to restart the system. Once you have rebooted, select `bspwm` as the window manager and then log in.
 
-## 🔧 If you do not see bspwm option
+## 🔧 If you do not see bspwm option (Troubleshooting) / alacritty toml
 ```
    sudo nano /usr/share/xsessions/bspwm.desktop
 ```
@@ -50,6 +50,10 @@ chmod +x setup.sh
 ```
 And restart, then the bspwm option should be visable
 
+If you get the warning of depricated .xml use
+```
+   alacritty migrate
+```
 ## 🏞️ Overview of the environment
 ![Alt text](Overview1.png "Optional title")
 ![Alt text](Overview2.png "Optional title")
