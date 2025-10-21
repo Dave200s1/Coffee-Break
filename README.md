@@ -58,7 +58,7 @@ And restart, then the bspwm option should be visable
 
 ## ⌨️ Keyboard shortcuts
 - <kbd>Windows</kbd> + <kbd>Enter</kbd>: Open a terminal emulator window (alacritty).
-- <kbd>Windows</kbd> + <kbd>W</kbd>: Close the current window.
+- <kbd>Windows</kbd> + <kbd>Q</kbd>: Close the current window.
 - <kbd>Windows</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd>: Restart the bspwm configuration.
 - <kbd>Windows</kbd> + <kbd>Alt</kbd> + <kbd>Q</kbd>: Log out.
 - <kbd>Windows</kbd> + <kbd>(⬆⬅⬇➡)</kbd>: Navigate through windows in the current workspace.
