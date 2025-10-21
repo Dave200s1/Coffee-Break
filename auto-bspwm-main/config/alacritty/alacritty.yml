@@ -19,10 +19,10 @@ cursor:
   blink_timeout: 5
 
 key_bindings:
-  - { key: Left,  mods: Control, action: MoveFocusLeft }
-  - { key: Right, mods: Control, action: MoveFocusRight }
-  - { key: Up,    mods: Control, action: MoveFocusUp }
-  - { key: Down,  mods: Control, action: MoveFocusDown }
+  - { key: Left,  mods: Control, action: Left }
+  - { key: Right, mods: Control, action: Right }
+  - { key: Up,    mods: Control, action: Up }
+  - { key: Down,  mods: Control, action: Down }
   - { key: Enter, mods: Control|Shift, action: SpawnNewInstance }
   - { key: T,     mods: Control|Shift, action: CreateNewTab }
   - { key: F1,    action: Copy }
@@ -38,9 +38,7 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
   save_to_clipboard: true
 
-url:
-  launcher: xdg-open
-  modifiers: Control
+
 
 shell:
   program: /usr/bin/fish
